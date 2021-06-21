@@ -11,3 +11,31 @@ library(readxl)
 datos<- read_excel("C:/Users/INDEX/Documents/Diseño de Experimentos/Temas Examen Final/af.xlsx")
 ```
 
+# TIPIFICACION O ESTANDARIZACION DE VARIABLES  
+La tipificacion permite que todas las variables metricas gocen de una misma unidad de medida estadistica.
+```{r}
+datost<- datos #crear una nueva base de datos o data frame
+datost<- scale(datost, center = T, scale = T)
+datost<- as.data.frame(datost)
+```
+
+# NORMALIDAD MULTIVARIANTE  
+HO: Normalidad multivariante  
+H1: No normalidad multivariante  
+Confianza= 95%  
+Alfa= 5% = 0,05  
+P value > alfa: no se rechaza la HO (Normalidad)  
+P value < alfa: se rechaza la HO (No normalidad)  
+```{r}
+library(MVN)
+mvn(datost[2:6])
+```
+como el p value < alfa: se rechaza la HO, por lo tanto, no existe normalidad multivariante.  
+
+
+
+
+
+
+
+
