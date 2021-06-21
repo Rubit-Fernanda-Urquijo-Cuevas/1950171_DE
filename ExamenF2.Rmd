@@ -30,9 +30,10 @@ P value < alfa: se rechaza la HO (No normalidad)
 library(MVN)
 mvn(datost[2:6])
 ```
+
 como el p value < alfa: se rechaza la HO, por lo tanto, no existe normalidad multivariante.  
 
-
+# MATRIZ DE CORRELACIONES
 
 
 
