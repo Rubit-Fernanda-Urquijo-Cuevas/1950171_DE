@@ -20,12 +20,12 @@ datost<- as.data.frame(datost)
 ```
 
 # NORMALIDAD MULTIVARIANTE  
-HO: Normalidad multivariante  
+H0: Normalidad multivariante  
 H1: No normalidad multivariante  
 Confianza= 95%  
 Alfa= 5% = 0,05  
-P value > alfa: no se rechaza la HO (Normalidad)  
-P value < alfa: se rechaza la HO (No normalidad)  
+P value > alfa: no se rechaza la H0 (Normalidad)  
+P value < alfa: se rechaza la H0 (No normalidad)  
 ```{r}
 library(MVN)
 mvn(datost[2:6])
@@ -33,8 +33,79 @@ mvn(datost[2:6])
 
 como el p value < alfa: se rechaza la HO, por lo tanto, no existe normalidad multivariante.  
 
-# MATRIZ DE CORRELACIONES
+# MATRIZ DE CORRELACIONES  
+H0: Correlacion = 0 (no hay correlacion)  
+H1: Correlacion diferente de 0 (si hay correlacion)  
 
+Cuando no se rechaza H0, no se aplica AFE.
+Se rechace HO, si para aplicar AFE.  
+```{r}
+library(psych)
+corr.test(datost[,2:6])
+correlaciones<- corr.test(datost[,2:6]) #se crea la matriz de correlaciones
+correlaciones$r #matriz de correlaciones
+r<- as.matrix(correlaciones$r)
+```
+Alfa= 0,05
+P value > alfa: no se rechaza H0
+P value < alfa: se rechaza H0, estamos en esta situacion, por lo tanto, si es aplicable el analisis factorial exploratorio
+
+# INDICADORES DE APLICABILIDAD DEL AFE (BONDAD DEL AJUSTE)  
+## CONTRASTE DE ESFERICIDAD DE BARTLETT  
+H0: Las correlaciones teoricas entre cada par de variables es nulo
+H1: Las correlaciones teoricas entre cada par de variables no es nulo  
+
+P value >alfa: no se aplica el AFE (no se rechaza H0)
+P value >alfa: si se aplica el AFE (se rechaza H0)  
+```{r}
+dim(datost) #tamaño de la muestra= 30 personas
+cortest.bartlett(r, n= 30)
+```
+como el p value es menor a alfa, se rechaza la H0, por lo tanto, las correlaciones teoricas entre cada par de variables es nulo, es decir, si es aplicable el analisis factorial exploratorio (AFE).
+
+## MEDIDA DE ADECUACION MUESTRAL DE KAISER, MEYER Y OKLIN (KMO)  
+Estudia variable por variable, si son o no aceptadas en el modelo para hacer AFE. (Que variables elimino o mantengo)
+Se mantiene una variable en el modelo, si el KMO es igual o mayor a 0,7.
+Se elimina una variable del modelo, si el KMO es menor a 0,7.
+```{r}
+KMO(r)
+```
+
+KMO= 0.5 El modelo es miserable, no es adecuado para realizar analisis factorial.
+KMO Nº del articulo= 0.5 (Miserable)
+KMO Cantidad de prod.= 0.5 (Miserable)
+KMO Precio Unidad= 0.5 (Miserable)
+KMO Subtotal= 0.5 (Miserable)
+KMO IVA= 0.5 (Miserable)
+
+# DETERMINACION DEL NUMERO DE FACTORES A EXTRAER  
+## Metodo de las componentes principales iteradas (Ejes principales)  
+Este metodo de las Ejes principales es de naturaleza no parametrica, es decir, que se ocupa, cuando no hay normalidad multivariante; pero, tambin es valido para modelos parametricos (normalidad multivariante)
+
+```{r}
+fa.parallel(r, fm= "pa", n.obs= 30, ylabel= "Eigenvalues")
+```
+Con el metodo de los ejes principales se extraeria solo 2 factor.  
+
+## Metodo de las componentes principales
+Metodo parametrico, sirve solo para modelos con normalidad multivariante
+```{r}
+fa.parallel(r, fm= "pc", n.obs= 30, ylabel= "Eigenvalues")
+```
+con el metodo de las componentes principales se recomienda extraer 2 factor
+
+## Metodo de la maxima verosimilitud  
+Metodo parametrico, sirve solo para modelos con normalidad multivariante 
+```{r}
+
+```
+Con el metodo de la maxima verosimilitud se recomienda extraer factor
+
+## Metodo paralelo con iteraciones 
+Metodo parametrico, sirve solo para modelos con normalidad multivariante
+```{r}
+
+```
 
 
 
